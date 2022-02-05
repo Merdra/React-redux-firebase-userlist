@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import "../App.css";
+import {v4 as uuid} from "uuid";
 
 const UserForm = (props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     let newUser = {
+      id: uuid(),
       name: name,
       email: email,
     };
