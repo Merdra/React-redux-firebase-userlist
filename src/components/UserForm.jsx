@@ -1,31 +1,42 @@
 import React, { useState } from "react";
 import "../App.css";
 import {v4 as uuid} from "uuid";
-import {connect} from "react-redux";
-import { addUserAction } from "../actions/action";
-import { useDispatch } from "react-redux";
+// import {connect} from "react-redux";
+// import { addUserAction } from "../actions/action";
+// import { useDispatch } from "react-redux";
+import firebase from "../firebase/config"
 
 const UserForm = (props) => {
   console.log(props);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const id = uuid()
+
     let newUser = {
-      id: uuid(),
+      id: id,
       name: name,
       email: email,
     };
       
-      dispatch(addUserAction(newUser));
-
-    props.addUser(newUser);
+    firebase
+    .firestore()
+    .collection("users")
+    .doc(id)
+    .set(newUser)
     setName("");
     setEmail("");
   };
+
+      // dispatch(addUserAction(newUser));
+
+    // props.addUser(newUser);
+
+  
 
   return (
     <form onSubmit={handleSubmit} className="App">
@@ -58,8 +69,8 @@ const UserForm = (props) => {
   );
 };
 
-const sendActionAsProps = {
-  createUser: addUserAction,
-}
+// const sendActionAsProps = {
+//   createUser: addUserAction,
+// }
 
-export default connect(null, sendActionAsProps)(UserForm);
+export default UserForm;
